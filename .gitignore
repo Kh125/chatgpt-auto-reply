@@ -1,1 +1,13 @@
-.venv
+.venv/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Python cache artifacts
+__pycache__/
+*.py[cod]
+
+# Local SQLite database
+db.sqlite3

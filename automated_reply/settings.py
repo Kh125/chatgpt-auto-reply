@@ -1,14 +1,30 @@
 from pathlib import Path
 import os
+from django.core.management.utils import get_random_secret_key
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-in%gm39ji8h!3&*@@g%2(^qkf46fhs=sj*d+)^)28br^0r^r8*'
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-DEBUG = True
+if DEBUG:
+    SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
+else:
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    if not SECRET_KEY:
+        raise ImproperlyConfigured('SECRET_KEY must be set when DEBUG is False.')
 
-ALLOWED_HOSTS = ['*']
+allowed_hosts_env = os.getenv('ALLOWED_HOSTS')
+if allowed_hosts_env:
+    ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',') if host.strip()]
+elif DEBUG:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+else:
+    raise ImproperlyConfigured('ALLOWED_HOSTS must be set when DEBUG is False.')
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_ORGANIZATION = os.getenv("OPENAI_ORGANIZATION")
 
 INSTALLED_APPS = [
     'rest_framework',
@@ -117,8 +133,9 @@ STORAGES = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CELERY_BROKER_URL='redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+REDIS_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379')
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_ACCEPT_CONTENT= ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

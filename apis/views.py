@@ -1,13 +1,14 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.conf import settings
 from .serializers import BookSerializer
 from .models import Book
 import requests
 import openai
 
-openai.api_key="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"
-openai.organization = "org-jkyKjdm8k8dDE9YzPATtxhDu"
+openai.api_key = settings.OPENAI_API_KEY
+openai.organization = settings.OPENAI_ORGANIZATION
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
@@ -16,6 +17,12 @@ class BookViewSet(viewsets.ModelViewSet):
 
 class ChatAPIView(APIView):
     def post(self, request, *args, **kwargs):
+        if not openai.api_key:
+            return Response(
+                {'error': 'OPENAI_API_KEY is not configured. Please set it in your environment variables.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
         user_message = request.data.get('message')
 
         if not user_message:
@@ -54,6 +61,3 @@ class RandomUserAPI(APIView):
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-
