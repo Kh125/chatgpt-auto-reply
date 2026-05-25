@@ -10,6 +10,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_ORGANIZATION = os.getenv("OPENAI_ORGANIZATION")
+
 INSTALLED_APPS = [
     'rest_framework',
     'apis.apps.ApisConfig',
