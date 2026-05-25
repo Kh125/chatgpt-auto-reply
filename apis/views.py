@@ -7,6 +7,9 @@ from .models import Book
 import requests
 import openai
 
+openai.api_key = settings.OPENAI_API_KEY
+openai.organization = settings.OPENAI_ORGANIZATION
+
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
@@ -14,9 +17,6 @@ class BookViewSet(viewsets.ModelViewSet):
 
 class ChatAPIView(APIView):
     def post(self, request, *args, **kwargs):
-        openai.api_key = settings.OPENAI_API_KEY
-        openai.organization = settings.OPENAI_ORGANIZATION
-
         if not openai.api_key:
             return Response({'error': 'OPENAI_API_KEY is not configured.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

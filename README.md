@@ -31,7 +31,7 @@ cd chatgpt-auto-reply
 
 # Copy env file and set your keys
 cp .env.example .env
-# Add OPENAI_API_KEY, DATABASE_URL, REDIS_URL to .env
+# Add OPENAI_API_KEY, SECRET_KEY, REDIS_URL to .env
 
 # Run with Docker
 docker build -t chatgpt-auto-reply .
@@ -42,9 +42,10 @@ docker run -p 8000:8000 chatgpt-auto-reply
 
 ```env
 OPENAI_API_KEY=your_openai_key
-DATABASE_URL=postgresql://user:pass@localhost:5432/db
+OPENAI_ORGANIZATION=your_openai_org_id
 REDIS_URL=redis://localhost:6379/0
 SECRET_KEY=your_django_secret
+DEBUG=True
 ```
 
 ## Architecture
