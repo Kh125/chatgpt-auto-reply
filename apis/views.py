@@ -18,7 +18,10 @@ class BookViewSet(viewsets.ModelViewSet):
 class ChatAPIView(APIView):
     def post(self, request, *args, **kwargs):
         if not openai.api_key:
-            return Response({'error': 'OPENAI_API_KEY is not configured.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {'error': 'OPENAI_API_KEY is not configured. Please set it in your environment variables or .env file.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         user_message = request.data.get('message')
 

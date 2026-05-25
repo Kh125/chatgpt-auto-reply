@@ -31,7 +31,7 @@ cd chatgpt-auto-reply
 
 # Copy env file and set your keys
 cp .env.example .env
-# Add OPENAI_API_KEY, SECRET_KEY, REDIS_URL to .env
+# Add OPENAI_API_KEY, SECRET_KEY, REDIS_URL, ALLOWED_HOSTS to .env
 
 # Run with Docker
 docker build -t chatgpt-auto-reply .
