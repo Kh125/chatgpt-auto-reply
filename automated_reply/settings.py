@@ -1,12 +1,19 @@
 from pathlib import Path
 import os
 from django.core.management.utils import get_random_secret_key
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
-DEBUG = os.getenv('DEBUG', 'False').lower() in ('1', 'true', 'yes', 'on')
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+
+if DEBUG:
+    SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
+else:
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    if not SECRET_KEY:
+        raise ImproperlyConfigured('SECRET_KEY must be set when DEBUG is False.')
 
 ALLOWED_HOSTS = ['*']
 
