@@ -19,7 +19,7 @@ class ChatAPIView(APIView):
     def post(self, request, *args, **kwargs):
         if not openai.api_key:
             return Response(
-                {'error': 'OPENAI_API_KEY is not configured. Please set it in your environment variables or .env file.'},
+                {'error': 'OPENAI_API_KEY is not configured. Please set it in your environment variables.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
